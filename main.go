@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"github.com/spf13/viper"
@@ -41,18 +42,9 @@ func InitDB(configFile string) error {
 	}
 
 	// 测试数据库连接
-	if err := db.Ping(); err != nil {
+	if err := db.PingContext(context.Background()); err != nil {
 		return err
 	}
-	createTableSQL := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s (
-		user_id INT NOT NULL,
-		order_id BIGINT NOT NULL,
-		content TEXT,
-		account DOUBLE,
-		PRIMARY KEY (user_id)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`, "orders")
-	// Execute the SQL statement
-	_, err = db.Exec(createTableSQL)
 
 	return nil
 }
